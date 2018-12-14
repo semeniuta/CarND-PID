@@ -2,25 +2,13 @@
 #define PID_H
 
 class PID {
-public:
-  /*
-   * Errors
-   */
-  double p_error_;
-  double i_error_;
-  double d_error_;
 
-  /*
-   * Coefficients
-   */
-  double Kp_;
-  double Ki_;
-  double Kd_;
+public:
 
   /*
    * Constructor
    */
-  PID() : p_error_{0}, i_error_{0}, d_error_{0}, Kp_{0}, Ki_{0}, Kd_{0} {};
+  PID();
 
   /*
    * Destructor.
@@ -38,9 +26,45 @@ public:
   void UpdateError(double cte);
 
   /*
+   * Get current steering angle
+   */
+  double SteeringAngle() {
+    return steer_;
+  }
+
+  /*
    * Calculate the total PID error.
    */
   double TotalError();
+
+private:
+
+  /*
+   * Error
+   */
+  double error_;
+
+  /*
+   * Coefficients
+   */
+  double Kp_;
+  double Ki_;
+  double Kd_;
+
+  /*
+   * Steering angle
+   */
+  double steer_;
+
+  /*
+   * Variables for computation of
+   * cross-track error derivative and sum
+   */
+  double cte_last_;
+  double cte_d_;
+  double cte_sum_;
+  bool first_call_;
+
 };
 
 #endif /* PID_H */
