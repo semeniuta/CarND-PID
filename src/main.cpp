@@ -7,7 +7,7 @@ int main() {
   uWS::Hub h;
   PID pid;
 
-  pid.Init(0.5, 0., 20.);
+  pid.Init(0.3, 0., 20.);
   initHub(h, pid);
 
   int port = 4567;
