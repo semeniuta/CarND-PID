@@ -5,7 +5,6 @@
 #include "hub.h"
 #include <iostream>
 #include "json.hpp"
-#include "PID.h"
 #include <math.h>
 
 // for convenience
@@ -33,10 +32,7 @@ std::string hasData(std::string s) {
   return "";
 }
 
-void initHub(uWS::Hub& h, double Kp, double Ki, double Kd) {
-
-  PID pid;
-  pid.Init(Kp, Ki, Kd);
+void initHub(uWS::Hub& h, PID& pid) {
 
   h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char* data, size_t length, uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.

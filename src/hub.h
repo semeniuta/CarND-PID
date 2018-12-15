@@ -5,12 +5,13 @@
 #ifndef PID_HUB_H
 
 #include <uWS/uWS.h>
+#include "PID.h"
 
 std::string hasData(std::string s);
 constexpr double pi();
 double deg2rad(double x);
 double rad2deg(double x);
-void initHub(uWS::Hub& h, double Kp, double Ki, double Kd);
+void initHub(uWS::Hub& h, PID& pid);
 
 #define PID_HUB_H
 
