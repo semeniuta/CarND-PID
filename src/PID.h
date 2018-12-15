@@ -1,7 +1,9 @@
 #ifndef PID_H
 #define PID_H
 
-class PID {
+#include "Controller.h"
+
+class PID : public Controller {
 
 public:
 
