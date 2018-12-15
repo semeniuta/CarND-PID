@@ -59,13 +59,15 @@ void initHub(uWS::Hub& h, Controller& controller) {
           double steer_value = controller.SteeringAngle();
 
           // DEBUG
-          std::cout << "CTE: " << cte << " Steering Value: " << steer_value << std::endl;
+          //std::cout << "CTE: " << cte << " Steering Value: " << steer_value << std::endl;
 
           json msgJson;
           msgJson["steering_angle"] = steer_value;
           msgJson["throttle"] = 0.3;
           auto msg = "42[\"steer\"," + msgJson.dump() + "]";
-          std::cout << msg << std::endl;
+
+          //std::cout << msg << std::endl;
+
           ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
         }
       } else {
