@@ -9,7 +9,7 @@ OnlineTwiddle::OnlineTwiddle(const std::array<double, 3>& p,
               const std::array<double, 3>& dp,
               int n)
               : p_{p}, dp_{dp}, n_{n}, counter_{0}, current_idx_{0}, best_error_{0},
-                state_{OnlineTwiddleState::first_run} {
+                best_p_{p}, state_{OnlineTwiddleState::first_run} {
 
   pid_.Init(p_[0], p_[1], p_[2]);
 
@@ -27,19 +27,28 @@ double OnlineTwiddle::SteeringAngle() {
   return pid_.SteeringAngle();
 }
 
+
 double OnlineTwiddle::TotalError() {
   return pid_.TotalError();
 }
+
 
 void OnlineTwiddle::check() {
 
   if (counter_ >= n_) {
 
-    std::cout << "Done with " << n_ << "cycles";
+    std::cout << "Done with " << n_ << " cycles";
 
     counter_ = 0;
 
     updateParams();
+
+    std::cout << "Best parameters: [" << best_p_[0] << ", " << best_p_[1] << ", " <<  best_p_[2] << "]\n";
+    std::cout << "Best error: " << best_error_ << "\n";
+
+    std::cout << "\nStarting new run\n";
+    std::cout << "p = [" << p_[0] << ", " << p_[1] << ", " <<  p_[2] << "]\n";
+    std::cout << "dp = [" << dp_[0] << ", " << dp_[1] << ", " <<  dp_[2] << "]\n";
 
     pid_ = PID();
     pid_.Init(p_[0], p_[1], p_[2]);
@@ -47,6 +56,7 @@ void OnlineTwiddle::check() {
   }
 
 }
+
 
 void OnlineTwiddle::updateParams() {
 
@@ -71,7 +81,9 @@ void OnlineTwiddle::updateParams() {
       if (err < best_error_) {
 
         best_error_ = err;
+        best_p_ = p_;
         dp_[current_idx_] *= 1.1;
+
         rotateCurrentIndex();
 
       } else {
@@ -90,6 +102,7 @@ void OnlineTwiddle::updateParams() {
       if (err < best_error_) {
 
         best_error_ = err;
+        best_p_ = p_;
         dp_[current_idx_] *= 1.1;
 
       } else {
@@ -106,7 +119,10 @@ void OnlineTwiddle::updateParams() {
 
   }
 
+  std::cout << "Error: " << err << "\n";
+
 }
+
 
 void OnlineTwiddle::rotateCurrentIndex() {
 
@@ -120,6 +136,9 @@ void OnlineTwiddle::rotateCurrentIndex() {
 }
 
 /*
+
+Reference Twiddle implementation in Python:
+
 def twiddle(tol=0.2):
 
     p = [0, 0, 0]

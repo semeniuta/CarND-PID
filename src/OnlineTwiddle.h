@@ -44,6 +44,7 @@ private:
   int counter_;
   int current_idx_;
   double best_error_;
+  std::array<double, 3> best_p_;
   OnlineTwiddleState state_;
 
 

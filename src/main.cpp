@@ -12,8 +12,8 @@ int main() {
 
   OnlineTwiddle controller{
       {0.3, 0., 20.},
-      {0.1, 0.001, 1.},
-      200
+      {0.01, 0.0001, 1.},
+      7000 // full track ~7000
   };
 
   initHub(h, controller);
