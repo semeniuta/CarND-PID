@@ -8,13 +8,16 @@ int main() {
   uWS::Hub h;
 
   //PID controller;
-  //controller.Init(0.3, 0., 20.);
+  //controller.Init(1.95, 0., 60.); // 0.3, 0., 20.
+
 
   OnlineTwiddle controller{
-      {0.3, 0., 20.},
-      {0.01, 0.0001, 1.},
-      7000 // full track ~7000
+      {0.9, 0., 40.}, // {0.3, 0., 20.},
+      {0.5, 0, 20.},  // {0.01, 0.0001, 1.},
+      7000,           // full track ~7000
+      {0, 2}
   };
+
 
   initHub(h, controller);
 

@@ -7,11 +7,20 @@
 
 OnlineTwiddle::OnlineTwiddle(const std::array<double, 3>& p,
               const std::array<double, 3>& dp,
-              int n)
-              : p_{p}, dp_{dp}, n_{n}, counter_{0}, current_idx_{0}, best_error_{0},
+              int n,
+              const std::vector<int>& indices)
+
+              : p_{p}, dp_{dp}, n_{n},
+                indices_{indices}, indices_idx_{0},
+                counter_{0}, best_error_{0},
                 best_p_{p}, state_{OnlineTwiddleState::first_run} {
 
   pid_.Init(p_[0], p_[1], p_[2]);
+  current_idx_ = indices_[indices_idx_];
+
+  std::cout << "Staring the first run\n";
+  std::cout << "p = [" << p_[0] << ", " << p_[1] << ", " <<  p_[2] << "]\n";
+  std::cout << "dp = [" << dp_[0] << ", " << dp_[1] << ", " <<  dp_[2] << "]\n";
 
 }
 
@@ -46,7 +55,15 @@ void OnlineTwiddle::check() {
     std::cout << "Best parameters: [" << best_p_[0] << ", " << best_p_[1] << ", " <<  best_p_[2] << "]\n";
     std::cout << "Best error: " << best_error_ << "\n";
 
-    std::cout << "\nStarting new run\n";
+    std::cout << "\nStarting new run (index=" << current_idx_ << ", type of run: ";
+
+    if (state_ == OnlineTwiddleState::normal_run) {
+      std::cout << "normal_run";
+    } else if (state_ == OnlineTwiddleState::back_run) {
+      std::cout << "back_run";
+    }
+    std::cout << ")\n";
+
     std::cout << "p = [" << p_[0] << ", " << p_[1] << ", " <<  p_[2] << "]\n";
     std::cout << "dp = [" << dp_[0] << ", " << dp_[1] << ", " <<  dp_[2] << "]\n";
 
@@ -82,9 +99,11 @@ void OnlineTwiddle::updateParams() {
 
         best_error_ = err;
         best_p_ = p_;
+
         dp_[current_idx_] *= 1.1;
 
         rotateCurrentIndex();
+        p_[current_idx_] += dp_[current_idx_];
 
       } else {
 
@@ -113,6 +132,8 @@ void OnlineTwiddle::updateParams() {
       }
 
       rotateCurrentIndex();
+      p_[current_idx_] += dp_[current_idx_];
+
       state_ = OnlineTwiddleState::normal_run;
 
       break;
@@ -126,12 +147,13 @@ void OnlineTwiddle::updateParams() {
 
 void OnlineTwiddle::rotateCurrentIndex() {
 
-  if (current_idx_ == 2) {
-    current_idx_ = 0;
-    return;
+  if (indices_idx_ == indices_.size()) {
+    indices_idx_ = 0;
+  } else {
+    indices_idx_++;
   }
 
-  current_idx_++;
+  current_idx_ = indices_[indices_idx_];
 
 }
 

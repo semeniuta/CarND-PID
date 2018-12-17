@@ -7,6 +7,7 @@
 
 #include "PID.h"
 #include <array>
+#include <vector>
 
 enum class OnlineTwiddleState {
   first_run,
@@ -22,7 +23,8 @@ public:
 
   OnlineTwiddle(const std::array<double, 3>& p,
                 const std::array<double, 3>& dp,
-                int n);
+                int n,
+                const std::vector<int>& indices);
 
   ~OnlineTwiddle() = default;
 
@@ -40,6 +42,9 @@ private:
   std::array<double, 3> p_;
   std::array<double, 3> dp_;
   int n_;
+
+  std::vector<int> indices_;
+  int indices_idx_;
 
   int counter_;
   int current_idx_;
