@@ -28,9 +28,9 @@ public:
 
   ~OnlineTwiddle() = default;
 
-  void UpdateError(double cte);
-  double SteeringAngle();
-  double TotalError();
+  void UpdateError(double cte) override;
+  double SteeringAngle() override;
+  double TotalError() override;
 
 private:
 

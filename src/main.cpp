@@ -1,22 +1,33 @@
 #include <iostream>
 #include "hub.h"
 #include "PID.h"
+#include "PIDCounter.h"
 #include "OnlineTwiddle.h"
 
 int main() {
 
   uWS::Hub h;
 
-  //PID controller;
-  //controller.Init(1.95, 0., 60.); // 0.3, 0., 20.
+  // 0.3, 0., 20.  <- the first manually tuned parameters
+  // 1.95, 0., 60. <- the best parameters obtained with OnlineTwiddle
+  //
+  //
+  //
 
-
-  OnlineTwiddle controller{
-      {0.9, 0., 40.}, // {0.3, 0., 20.},
-      {0.5, 0, 20.},  // {0.01, 0.0001, 1.},
-      7000,           // full track ~7000
-      {0, 2}
+  PIDCounter controller{
+      {1.95, 0., 60.},
+      7000
   };
+
+  //PID controller;
+  //controller.Init(1.95, 0., 60.);
+
+//  OnlineTwiddle controller{
+//      {0.9, 0., 40.},
+//      {0.5, 0, 20.},
+//      7000,           // full track ~7000
+//      {0, 2}
+//  };
 
 
   initHub(h, controller);
