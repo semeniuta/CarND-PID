@@ -8,27 +8,8 @@ int main() {
 
   uWS::Hub h;
 
-  // 0.3, 0., 20.  <- the first manually tuned parameters
-  // 1.95, 0., 60. <- the best parameters obtained with OnlineTwiddle
-  //
-  //
-  //
-
-  PIDCounter controller{
-      {1.95, 0., 60.},
-      7000
-  };
-
-  //PID controller;
-  //controller.Init(1.95, 0., 60.);
-
-//  OnlineTwiddle controller{
-//      {0.9, 0., 40.},
-//      {0.5, 0, 20.},
-//      7000,           // full track ~7000
-//      {0, 2}
-//  };
-
+  PID controller;
+  controller.Init(1.95, 0., 60.);
 
   initHub(h, controller);
 
